@@ -2,7 +2,7 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
-import init from '../src/init.js';
+import app from '../src/application.js';
 
 beforeEach(async () => {
   const pathToHtml = path.resolve(__dirname, '__fixtures__/index.html');
@@ -10,7 +10,7 @@ beforeEach(async () => {
   document.body.innerHTML = html;
 });
 
-test('init', () => {
-  init();
+test('app', () => {
+  app();
   expect(true).toBeDefined();
 });
