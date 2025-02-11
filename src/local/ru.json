@@ -1,0 +1,17 @@
+{
+  "appTitle": "RSS агрегатор",
+  "appSubtitle": "Начните читать RSS сегодня! Это легко, это красиво.",
+  "form": {
+    "placeholder": "ссылка RSS",
+    "button": "Добавить"
+  },
+  "feedback": {
+    "default": "Произошла ошибка"
+  },
+  "errors": {
+    "default": "Ошибка валидации",
+    "required": "Поле не должно быть пустым",
+    "invalidUrl": "Некорректный URL",
+    "duplicate": "RSS уже добавлен"
+  }
+}

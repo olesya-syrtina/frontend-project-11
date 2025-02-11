@@ -1,15 +1,24 @@
 import * as yup from 'yup';
+import i18next from 'i18next';
 
-const validate = (url, feeds) => {
-  const urlSchema = yup
-    .string()
+yup.setLocale({
+  mixed: {
+    default: () => 'errors.default',
+    required: () => 'errors.required'
+  },
+  string: {
+    url: () => 'errors.invalidUrl',
+    notOneOf: () => 'errors.duplicate'
+  }
+});
+
+export default (url, feeds) => {
+  const schema = yup.string()
     .trim()
     .required()
     .url()
     .nullable()
     .notOneOf(feeds);
 
-  return urlSchema.validate(url);
+  return schema.validate(url);
 };
-
-export default validate;

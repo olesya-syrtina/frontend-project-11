@@ -8,9 +8,8 @@ const getDefaultState = () => ({
   },
 });
 
-const createState = () => {
+export default () => {
   const state = getDefaultState();
-  return onChange(state, () => {});
+  return onChange(state, () => {
+  });
 };
-
-export default createState;

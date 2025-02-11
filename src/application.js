@@ -1,10 +1,12 @@
 // @ts-check
 import validate from './validation.js';
-import { elements, updateView } from './view.js';
+import { elements, updateView, updateInterfaceTexts } from './view.js';
 import createState from './state.js';
 
 export default () => {
   const state = createState();
+
+  updateInterfaceTexts();
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
