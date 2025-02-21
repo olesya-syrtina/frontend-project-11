@@ -14,6 +14,56 @@ const getProxyUrl = (url) => {
   return proxyUrl.toString();
 };
 
+const updateFeeds = (state) => {
+  if (state.feeds.length === 0) {
+    setTimeout(() => updateFeeds(state), 5000);
+    return;
+  }
+
+  const promises = state.feeds.map(feed => {
+    const proxyUrl = getProxyUrl(feed.url);
+    return fetch(proxyUrl)
+      .then(response => {
+         if (!response.ok) {
+            throw new Error(i18next.t('feedback.default'));
+         }
+         return response.json();
+      })
+      .then(data => {
+         const rssContent = data.contents;
+         const parsed = parseRSS(rssContent);
+         const currentPostLinks = state.posts
+             .filter(post => post.feedId === feed.id)
+             .map(post => post.link);
+         const newPosts = parsed.posts.filter(post => !currentPostLinks.includes(post.link));
+         const postsWithId = newPosts.map(post => ({
+              id: generateId(),
+              feedId: feed.id,
+              title: post.title,
+              link: post.link,
+              description: post.description,
+         }));
+         return postsWithId;
+      })
+      .catch(err => {
+         console.error(`Ошибка обновления для ${feed.url}:`, err);
+         return [];
+      });
+  });
+
+  Promise.all(promises)
+    .then(results => {
+       const newPosts = results.flat();
+       if (newPosts.length > 0) {
+          state.posts = [...newPosts, ...state.posts];
+       }
+    })
+    .finally(() => {
+         updateView(state);
+         setTimeout(() => updateFeeds(state), 5000);
+    });
+};
+
 export default () => {
   const state = createState();
 
@@ -63,4 +113,6 @@ export default () => {
       })
       .finally(() => updateView(state));
   });
+
+  updateFeeds(state);
 };
