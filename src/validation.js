@@ -1,14 +1,15 @@
+import i18next from 'i18next';
 import * as yup from 'yup';
 
 yup.setLocale({
   mixed: {
-    default: () => 'errors.default',
-    required: () => 'errors.required'
+    default: () => i18next.t('errors.default'),
+    required: () => i18next.t('errors.required'),
+    notOneOf: () => i18next.t('errors.duplicate'),
   },
   string: {
-    url: () => 'errors.invalidUrl',
-    notOneOf: () => 'errors.duplicate'
-  }
+    url: () => i18next.t('errors.invalidUrl'),
+  },
 });
 
 export default (url, feeds) => {

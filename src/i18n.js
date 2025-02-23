@@ -7,8 +7,8 @@ i18next.init({
   resources: {
     ru: {
       translation: ruTranslations,
-    }
-  }
+    },
+  },
 });
 
 export default i18next;

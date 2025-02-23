@@ -44,19 +44,19 @@ const updateView = (state) => {
   const feedHeader = document.createElement('h2');
   feedHeader.textContent = 'Фиды';
   elements.feedsContainer.append(feedHeader);
-  state.feeds.forEach(feed => {
+  state.feeds.forEach((feed) => {
     const feedElement = document.createElement('div');
     feedElement.classList.add('feed');
     feedElement.innerHTML = `<h2>${feed.title}</h2><p>${feed.description}</p>`;
     elements.feedsContainer.appendChild(feedElement);
   });
-  
+
   elements.postsContainer.innerHTML = '';
   const postHeader = document.createElement('h2');
   postHeader.textContent = 'Посты';
   elements.postsContainer.append(postHeader);
   const postsList = document.createElement('ul');
-  state.posts.forEach(post => {
+  state.posts.forEach((post) => {
     const postItem = document.createElement('li');
     const link = document.createElement('a');
     link.href = post.link;
