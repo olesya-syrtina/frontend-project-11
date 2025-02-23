@@ -16,7 +16,7 @@ const getProxyUrl = (url) => {
 
 const updateFeeds = (state) => {
   if (state.feeds.length === 0) {
-    setTimeout(() => updateFeeds(state), 5000);
+    setTimeout(() => updateFeeds(state), 500000);
     return;
   }
 
@@ -42,6 +42,7 @@ const updateFeeds = (state) => {
           title: post.title,
           link: post.link,
           description: post.description,
+          isRead: false,
         }));
         return postsWithId;
       })
@@ -102,6 +103,7 @@ export default () => {
           title: post.title,
           link: post.link,
           description: post.description,
+          isRead: false,
         }));
         state.posts = [...state.posts, ...postsWithId];
         state.form.status = 'success';
