@@ -1,10 +1,9 @@
 // @ts-check
 import i18next from 'i18next';
 import validate from './validation.js';
-import { elements, updateView, updateInterfaceTexts } from './view.js';
-import createState from './state.js';
+import { updateInterfaceTexts, updateView } from './view.js';
 import parseRSS from './parser.js';
-import { generateId } from './utils.js';
+import generateId from './utils.js';
 
 const getProxyUrl = (url) => {
   const baseUrl = 'https://allorigins.hexlet.app/get';
@@ -14,67 +13,87 @@ const getProxyUrl = (url) => {
   return proxyUrl.toString();
 };
 
-const updateFeeds = (state) => {
-  if (state.feeds.length === 0) {
-    setTimeout(() => updateFeeds(state), 500000);
-    return;
-  }
-
-  const promises = state.feeds.map((feed) => {
-    const proxyUrl = getProxyUrl(feed.url);
-    return fetch(proxyUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(i18next.t('feedback.default'));
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const rssContent = data.contents;
-        const parsed = parseRSS(rssContent);
-        const currentPostLinks = state.posts
-          .filter((post) => post.feedId === feed.id)
-          .map((post) => post.link);
-        const newPosts = parsed.posts.filter((post) => !currentPostLinks.includes(post.link));
-        const postsWithId = newPosts.map((post) => ({
-          id: generateId(),
-          feedId: feed.id,
-          title: post.title,
-          link: post.link,
-          description: post.description,
-          isRead: false,
-        }));
-        return postsWithId;
-      })
-      .catch((err) => {
-        console.error(`Ошибка обновления для ${feed.url}:`, err);
-        return [];
-      });
-  });
-
-  Promise.all(promises)
-    .then((results) => {
-      const newPosts = results.flat();
-      if (newPosts.length > 0) {
-        state.posts = [...newPosts, ...state.posts];
-      }
-    })
-    .finally(() => {
-      updateView(state);
-      setTimeout(() => updateFeeds(state), 5000);
-    });
-};
-
 export default () => {
-  const state = createState();
+  const elements = {
+    form: document.querySelector('.rss-form'),
+    input: document.querySelector('#url-input'),
+    feedback: document.querySelector('.feedback'),
+    feedsContainer: document.querySelector('.feeds'),
+    postsContainer: document.querySelector('.posts'),
+    modal: document.querySelector('#modal'),
+  };
 
-  updateInterfaceTexts();
+  const state = {
+    feeds: [],
+    posts: [],
+    form: {
+      status: 'filling',
+      error: null,
+    },
+    ui: {
+      viewedPostsIds: new Set(),
+    },
+  };
+
+  updateInterfaceTexts(elements);
+
+  let updateFeedsIntervalId = null;
+
+  const updateFeeds = () => {
+    if (state.feeds.length === 0) {
+      return;
+    }
+
+    const promises = state.feeds.map((feed) => {
+      const proxyUrl = getProxyUrl(feed.url);
+      return fetch(proxyUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(i18next.t('feedback.default'));
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const rssContent = data.contents;
+          const parsed = parseRSS(rssContent);
+          const currentPostLinks = state.posts
+            .filter((post) => post.feedId === feed.id)
+            .map((post) => post.link);
+          const newPosts = parsed.posts.filter((post) => !currentPostLinks.includes(post.link));
+          const postsWithId = newPosts.map((post) => ({
+            id: generateId(),
+            feedId: feed.id,
+            title: post.title,
+            link: post.link,
+            description: post.description,
+          }));
+          return postsWithId;
+        })
+        .catch((err) => {
+          console.error(`Ошибка обновления для ${feed.url}:`, err);
+          return [];
+        });
+    });
+
+    Promise.all(promises)
+      .then((results) => {
+        const newPosts = results.flat();
+        if (newPosts.length > 0) {
+          state.posts = [...newPosts, ...state.posts];
+        }
+      })
+      .finally(() => {
+        updateView(state, elements);
+      });
+  };
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
     const url = elements.input.value.trim();
 
     state.form.status = 'validating';
+    updateView(state, elements);
+
     validate(url, state.feeds.map((feed) => feed.url))
       .then(() => {
         state.form.status = 'loading';
@@ -103,18 +122,19 @@ export default () => {
           title: post.title,
           link: post.link,
           description: post.description,
-          isRead: false,
         }));
         state.posts = [...state.posts, ...postsWithId];
         state.form.status = 'success';
         state.form.error = null;
+
+        if (state.feeds.length === 1 && !updateFeedsIntervalId) {
+          updateFeedsIntervalId = setInterval(updateFeeds, 5000);
+        }
       })
       .catch((err) => {
         state.form.status = 'error';
         state.form.error = err.message;
       })
-      .finally(() => updateView(state));
+      .finally(() => updateView(state, elements));
   });
-
-  updateFeeds(state);
 };
