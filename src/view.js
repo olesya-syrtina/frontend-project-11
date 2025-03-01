@@ -34,10 +34,8 @@ const showModal = (title, description, link, elements) => {
   modalInstance.show();
 };
 
-const updateView = (state, elements) => {
-  const {
-    input, feedback, form, feedsContainer, postsContainer,
-  } = elements;
+const updateFormView = (state, elements) => {
+  const { input, feedback, form } = elements;
 
   if (state.form.error) {
     feedback.textContent = state.form.error;
@@ -55,7 +53,10 @@ const updateView = (state, elements) => {
     form.reset();
     input.focus();
   }
+};
 
+const updateFeedsView = (state, elements) => {
+  const { feedsContainer } = elements;
   feedsContainer.innerHTML = '';
   if (state.feeds.length > 0) {
     const feedsTitle = i18next.exists('feeds.title') ? i18next.t('feeds.title') : 'Фиды';
@@ -69,7 +70,10 @@ const updateView = (state, elements) => {
       feedsContainer.appendChild(feedElement);
     });
   }
+};
 
+const updatePostsView = (state, elements) => {
+  const { postsContainer } = elements;
   postsContainer.innerHTML = '';
   if (state.posts.length > 0) {
     const postsTitle = i18next.exists('posts.title') ? i18next.t('posts.title') : 'Посты';
@@ -119,4 +123,10 @@ const updateView = (state, elements) => {
   }
 };
 
-export { updateInterfaceTexts, updateView };
+export {
+  updateInterfaceTexts,
+  showModal,
+  updateFormView,
+  updateFeedsView,
+  updatePostsView,
+};

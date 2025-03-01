@@ -4,7 +4,7 @@ export default (rssContent) => {
 
   const parserError = doc.querySelector('parsererror');
   if (parserError) {
-    throw new Error('Ошибка парсинга RSS');
+    throw new Error('Ресурс не содержит валидный RSS');
   }
 
   const channel = doc.querySelector('channel');

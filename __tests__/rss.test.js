@@ -11,7 +11,7 @@ test('Проверка успешного добавления RSS', async ({ pa
   await page.fill('input[name="url"]', validFeedUrl);
   await page.click('button[type="submit"]');
 
-  await expect(page.locator('h2', { hasText: 'Фиды' })).toBeVisible({ timeout: 6000 });
+  await expect(page.locator('h2', { hasText: 'Фиды' })).toBeVisible();
   await expect(page.locator('h2', { hasText: 'Посты' })).toBeVisible();
   await expect(page.locator('button', { hasText: 'Просмотр' }).first()).toBeVisible();
 });
@@ -25,22 +25,22 @@ test('Проверка ошибки пустого поля', async ({ page }) =
 test('Проверка ошибки невалидного URL', async ({ page }) => {
   await page.fill('input[name="url"]', invalidUrl);
   await page.click('button[type="submit"]');
-  await expect(page.locator('.feedback')).toHaveText('Некорректный URL');
+  await expect(page.locator('.feedback')).toHaveText('Ссылка должна быть валидным URL');
 });
 
 test('Проверка ошибки дублирования RSS', async ({ page }) => {
   await page.fill('input[name="url"]', validFeedUrl);
   await page.click('button[type="submit"]');
-  await expect(page.locator('h2', { hasText: 'Фиды' })).toBeVisible({ timeout: 6000 });
+  await expect(page.locator('h2', { hasText: 'Фиды' })).toBeVisible();
   await page.fill('input[name="url"]', validFeedUrl);
   await page.click('button[type="submit"]');
-  await expect(page.locator('.feedback')).toHaveText('RSS уже добавлен');
+  await expect(page.locator('.feedback')).toHaveText('RSS уже существует');
 });
 
 test('Проверка модального окна предпросмотра', async ({ page }) => {
   await page.fill('input[name="url"]', validFeedUrl);
   await page.click('button[type="submit"]');
-  await expect(page.locator('h2', { hasText: 'Посты' })).toBeVisible({ timeout: 6000 });
+  await expect(page.locator('h2', { hasText: 'Посты' })).toBeVisible();
   const previewButton = page.locator('button', { hasText: 'Просмотр' }).first();
   await previewButton.click();
 
@@ -60,5 +60,5 @@ test('Проверка ошибки сети', async ({ page }) => {
 
   await page.fill('input[name="url"]', validFeedUrl);
   await page.click('button[type="submit"]');
-  await expect(page.locator('.feedback')).toHaveText('Произошла ошибка');
+  await expect(page.locator('.feedback')).toHaveText('Ошибка сети');
 });
