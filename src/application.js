@@ -109,6 +109,9 @@ export default () => {
 
   elements.form.addEventListener('submit', (event) => {
     event.preventDefault();
+    if (watchedState.form.status === 'loading') {
+      return;
+    }
     const url = elements.input.value.trim();
 
     watchedState.form.status = 'validating';
