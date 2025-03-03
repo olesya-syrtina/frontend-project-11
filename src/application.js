@@ -78,7 +78,7 @@ export default () => {
           const currentPostLinks = watchedState.posts
             .filter((post) => post.feedId === feed.id)
             .map((post) => post.link);
-          const newPosts = parsed.posts.filter((post) => !currentPostLinks.includes(post.link));
+          const newPosts = parsed.items.filter((post) => !currentPostLinks.includes(post.link));
           return newPosts.map((post) => ({
             id: generateId(),
             feedId: feed.id,
@@ -124,12 +124,12 @@ export default () => {
         const feedId = generateId();
         const feed = {
           id: feedId,
-          title: parsed.feed.title,
-          description: parsed.feed.description,
+          title: parsed.element.title,
+          description: parsed.element.description,
           url,
         };
         watchedState.feeds.push(feed);
-        const postsWithId = parsed.posts.map((post) => ({
+        const postsWithId = parsed.items.map((post) => ({
           id: generateId(),
           feedId,
           title: post.title,

@@ -13,26 +13,26 @@ export default (rssContent) => {
   if (!channel) {
     throw new Error(i18next.t('errors.invalidChannel'));
   }
-  const titleElement = channel.querySelector('title');
-  const descriptionElement = channel.querySelector('description');
+  const elementTitle = channel.querySelector('title');
+  const elementDescription = channel.querySelector('description');
 
-  const feed = {
-    title: titleElement ? titleElement.textContent : 'No title',
-    description: descriptionElement ? descriptionElement.textContent : 'No description',
+  const element = {
+    title: elementTitle ? elementTitle.textContent : 'No title',
+    description: elementDescription ? elementDescription.textContent : 'No description',
   };
 
-  const items = Array.from(doc.querySelectorAll('item'));
-  const posts = items.map((item) => {
-    const postTitleElement = item.querySelector('title');
-    const postLinkElement = item.querySelector('link');
-    const postDescriptionElement = item.querySelector('description');
+  const itemArray = Array.from(doc.querySelectorAll('item'));
+  const items = itemArray.map((item) => {
+    const itemTitle = item.querySelector('title');
+    const itemLink = item.querySelector('link');
+    const itemDescription = item.querySelector('description');
 
     return {
-      title: postTitleElement ? postTitleElement.textContent : 'No title',
-      link: postLinkElement ? postLinkElement.textContent : '',
-      description: postDescriptionElement ? postDescriptionElement.textContent : '',
+      title: itemTitle ? itemTitle.textContent : 'No title',
+      link: itemLink ? itemLink.textContent : '',
+      description: itemDescription ? itemDescription.textContent : '',
     };
   });
 
-  return { feed, posts };
+  return { element, items };
 };
