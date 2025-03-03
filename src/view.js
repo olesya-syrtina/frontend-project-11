@@ -59,7 +59,7 @@ const updateFeedsView = (state, elements) => {
   const { feedsContainer } = elements;
   feedsContainer.innerHTML = '';
   if (state.feeds.length > 0) {
-    const feedsTitle = i18next.exists('feeds.title') ? i18next.t('feeds.title') : 'Фиды';
+    const feedsTitle = i18next.t('feeds.title');
     const feedHeader = document.createElement('h2');
     feedHeader.textContent = feedsTitle;
     feedsContainer.append(feedHeader);
@@ -76,7 +76,7 @@ const updatePostsView = (state, elements) => {
   const { postsContainer } = elements;
   postsContainer.innerHTML = '';
   if (state.posts.length > 0) {
-    const postsTitle = i18next.exists('posts.title') ? i18next.t('posts.title') : 'Посты';
+    const postsTitle = i18next.t('posts.title');
     const postHeader = document.createElement('h2');
     postHeader.textContent = postsTitle;
     postsContainer.append(postHeader);
@@ -105,7 +105,7 @@ const updatePostsView = (state, elements) => {
       postItem.appendChild(link);
 
       const previewButton = document.createElement('button');
-      previewButton.textContent = 'Просмотр';
+      previewButton.textContent = i18next.t('posts.previewButton');
       previewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
       postItem.appendChild(previewButton);
 

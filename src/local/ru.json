@@ -5,6 +5,13 @@
     "placeholder": "ссылка RSS",
     "button": "Добавить"
   },
+  "feeds": {
+    "title": "Фиды"
+  },
+  "posts": {
+    "title": "Посты",
+    "previewButton": "Просмотр"
+  },
   "feedback": {
     "default": "Ошибка сети",
     "success": "RSS успешно загружен"
@@ -13,6 +20,8 @@
     "default": "Ошибка валидации",
     "required": "Поле не должно быть пустым",
     "invalidUrl": "Ссылка должна быть валидным URL",
-    "duplicate": "RSS уже существует"
+    "duplicate": "RSS уже существует",
+    "invalidRss": "Ресурс не содержит валидный RSS",
+    "invalidChannel": "Некорректный RSS: отсутствует элемент channel"
   }
 }
