@@ -99,6 +99,11 @@ export default () => {
         if (newPosts.length > 0) {
           watchedState.posts = [...newPosts, ...watchedState.posts];
         }
+      })
+      .finally(() => {
+        if (watchedState.feeds.length === 1 && !updateFeedsIntervalId) {
+          updateFeedsIntervalId = setInterval(updateFeeds, 5000);
+        }
       });
   };
 
@@ -135,9 +140,7 @@ export default () => {
         watchedState.form.status = 'success';
         watchedState.form.error = null;
 
-        if (watchedState.feeds.length === 1 && !updateFeedsIntervalId) {
-          updateFeedsIntervalId = setInterval(updateFeeds, 5000);
-        }
+        updateFeeds();
       })
       .catch((err) => {
         watchedState.form.status = 'error';
