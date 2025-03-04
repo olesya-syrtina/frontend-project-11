@@ -4,7 +4,7 @@ import axios from 'axios';
 import onChange from 'on-change';
 import validate from './validation.js';
 import {
-  updateInterfaceTexts, updateFormView, updateFeedsView, updatePostsView,
+  updateInterfaceTexts, updateFormView, updateFeedsView, updatePostsView, showModal,
 } from './view.js';
 import parseRSS from './parser.js';
 import generateId from './utils.js';
@@ -36,6 +36,7 @@ export default () => {
     },
     ui: {
       viewedPostsIds: new Set(),
+      modalPostId: null,
     },
   };
 
@@ -51,6 +52,13 @@ export default () => {
     }
     if (path === 'ui.viewedPostsIds') {
       updatePostsView(watchedState, elements);
+    }
+    if (path === 'ui.modalPostId' && watchedState.ui.modalPostId) {
+      const post = watchedState.posts.find((p) => p.id === watchedState.ui.modalPostId);
+      if (post) {
+        showModal(post.title, post.description, post.link, elements);
+      }
+      watchedState.ui.modalPostId = null;
     }
   });
 

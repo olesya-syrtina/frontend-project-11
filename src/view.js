@@ -112,9 +112,8 @@ const updatePostsView = (state, elements) => {
       previewButton.addEventListener('click', (event) => {
         event.preventDefault();
         state.ui.viewedPostsIds.add(post.id);
-        link.classList.remove('fw-bold');
-        link.classList.add('fw-normal');
-        showModal(post.title, post.description, post.link, elements);
+        // eslint-disable-next-line no-param-reassign
+        state.ui.modalPostId = post.id;
       });
 
       postsList.appendChild(postItem);
