@@ -20,4 +20,4 @@ make install
 ```
 make develop
 ```
-![img.png](public/img/screen1.png)
+![screenshot](https://github.com/user-attachments/assets/90acf696-4c10-42a2-bd95-830c6955f0ed)
